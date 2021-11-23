@@ -112,9 +112,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+
 _me=$(whoami)
 _host=$(hostname -s)
-_myip=$(hostname -I)
+_myip=$(hostname -I | cut -d ' ' -f1)
 
 _os=$(hostnamectl|egrep "Operating")
 _krnl=$(hostnamectl|egrep "Kernel")
@@ -122,9 +123,6 @@ _krnl=$(hostnamectl|egrep "Kernel")
 # Skale Bash Section
 
 echo "skaleio.bash"
-echo "${_os##*( )}"
-echo "${_krnl##*( )}"
-echo "IP: $_myip"
-echo "Dir: $(pwd)"
-echo "Hi $_me(at)$_host"
-
+echo "${_os##*( )}    ${_krnl##*( )}"
+echo "Hi $_me(at)$_host   $_myip"
+echo "dir: $(pwd)"
