@@ -29,15 +29,18 @@ else
 
 	#Set up lamp server
 	echo "============================================"
-	echo "Installing LAMP Server"
+	echo "Installing LEMP Server"
 	echo "============================================"
 	sudo apt-get update
-	sudo apt-get install apache2 -y
-	sudo apt-get install php5 libapache2-mod-php5 -y
-	sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sshs'
-	sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sshs'
-	sudo apt-get -y install mysql-server
-	sudo apt-get install php5-mysql -y
+	sudo apt install nginx -y
+	sudo apt install php php-fpm php-mysql -y
+	sudo apt install mariadb-server mariadb-client -y
+
+	# sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sshs'
+	# sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sshs'
+	
+	mysql -u root -e "CREATE USER 'pi' @ '%' IDENTIFIED BY 'pi23'; GRANT ALL PRIVILEGES ON *. * TO 'test' @ '%'; FLUSH PRIVILEGES;"
+	
 	#need to set root password
 
 
