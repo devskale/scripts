@@ -46,5 +46,5 @@ echo "\033[1;32m   .~~.   .~~.    \033[1;36m$DATUM
 \033[1;31m ~ .~ (   ) ~. ~  \033[0;37mTemperatur....: $TEMP Â°C
 \033[1;31m  (  : '~' :  )   \033[0;37mSpeicher......: Gesamt: $DISK1 | Belegt: $DISK2 | Frei: $DISK3
 \033[1;31m   '~ .~~~. ~'    \033[0;37mRAM (MB)......: Gesamt: $RAM1 | Belegt: $RAM2 | Frei: $RAM3 | Swap: $RAM4
-\033[1;31m       '~'        \033[0;37mIP-Adressen...: LAN: \033[1;35m$IP_LAN\033[0;37m | WiFi: \033[1;35m$IP_WLAN \033[0;37m | SSID: \033[1;35m $SSID
+\033[1;31m       '~'        \033[0;37mIP-Adressen...: LAN: \033[1;35m$IP_LAN\033[0;37m | WiFi: \033[1;35m$IP_WLAN \033[0;37m | SSID: \033[1;35m$SSID
 \033[m"
