@@ -70,7 +70,7 @@ EOF
 	sudo mv /var/www/html/wordpress/* /var/www/html
 	sudo rm -rf /var/www/html/wordpress latest.tar.gz
 
-	sudo /etc/init.d/apache2 reload
+	sudo /etc/init.d/nginx reload
 	# sudo /etc/init.d/apache2 restart
 	
 
