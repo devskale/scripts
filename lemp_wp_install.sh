@@ -6,7 +6,7 @@ dbpass="sshs"
 
 clear
 echo "============================================"
-echo "WordPress Install Script"
+echo "WordPress LEMP Install Script"
 echo "============================================"
 echo "run install? (y/n)"
 read -e run
@@ -27,7 +27,7 @@ else
 
 	fi
 
-	#Set up lamp server
+	#Set up lemp server
 	echo "============================================"
 	echo "Installing LEMP Server"
 	echo "============================================"
