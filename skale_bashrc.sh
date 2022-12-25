@@ -4,6 +4,7 @@ _myip=$(hostname -I | cut -d ' ' -f1)
 
 _os=$(hostnamectl|egrep "Operating")
 _krnl=$(hostnamectl|egrep "Kernel")
+_ipext=$(curl ifconfig.co -s)
 
 echo "          __          .__              .__        "
 echo "    _____|  | ______  |  |   ____      |__| ____  "
@@ -13,7 +14,10 @@ echo "  /____  >__|_ (____  /____/\___  > /\ |__|\____/ "
 echo "       \/     \/    \/          \/  \/            "
 
 
-echo "custom bash"
-echo "${_os##*( )}, ${_krnl##*( )}"
-echo "$_me@$_host, IP:$_myip"
+echo ""
+echo "${_os##*( )}"
+echo "${_krnl##*( )}"
+echo "$_me@$_host"
+echo "Int: $_myip"
+echo "Ext: $_ipext"
 echo "dir: $(pwd)"
