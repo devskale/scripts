@@ -1,0 +1,38 @@
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        root /var/www/example.com/html;
+        index index.php;
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+
+server {
+    listen 80;
+    server_name api.example.com;
+
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+
+/*
+This configuration defines two server blocks: one for the WordPress website and one for the Python API. The first server block listens for incoming requests on port 80 and routes them to the WordPress website, which is served from the /var/www/example.com/html directory. The location block with the \.php$ regular expression handles PHP files and passes them to the PHP-FPM (FastCGI Process Manager) for processing.
+
+The second server block listens for incoming requests on port 80 and routes them to the Python API running on port 5000 on localhost (127.0.0.1). The proxy_pass directive specifies the URL to which the request should be forwarded, and the proxy_set_header directives set various request headers that may be useful to your API.
+
+In this example, the WordPress website is accessed using the example.com domain, and the Python API is accessed using the api.example.com domain. You will need to configure your DNS settings to point these domains to the correct IP address, and you may need to modify the server_name and root directives to match your specific setup.
+*/
