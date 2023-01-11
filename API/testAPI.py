@@ -1,6 +1,6 @@
 import requests
 
-response = requests.get('http://localhost:5000/tasks/2')
+response = requests.get('https://amd2.mooo.com/api/tasks')
 
 if response.status_code == 200:
     print(response.json())

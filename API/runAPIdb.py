@@ -4,7 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Set up the database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+with app.app_context():
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
 db = SQLAlchemy(app)
 
 # Define the Task model
