@@ -4,8 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Set up the database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
+with app.app_context():
+   # Store data in the context
+   app.config['DEBUG'] = True
+   app.config['SECRET_KEY'] = 'secret'
+   app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+   db = SQLAlchemy(app)
+   # Create the database tables
+   db.create_all()
 
 # Define the Task model
 class Task(db.Model):
@@ -19,22 +25,20 @@ class Task(db.Model):
         self.description = description
         self.done = done
 
-# Create the database tables
-db.create_all()
 
-@app.route('/tasks', methods=['GET'])
+@app.route('/api/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()
     return jsonify([{'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done} for task in tasks])
 
-@app.route('/tasks/<int:task_id>', methods=['GET'])
+@app.route('/api//tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = Task.query.get(task_id)
     if task is None:
         return jsonify({'message': 'Task not found'}), 404
     return jsonify({'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done})
 
-@app.route('/tasks', methods=['POST'])
+@app.route('/api//tasks', methods=['POST'])
 def create_task():
     title = request.json['title']
     description = request.json['description']
@@ -44,7 +48,7 @@ def create_task():
     db.session.commit()
     return jsonify({'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}), 201
 
-@app.route('/tasks/<int:task_id>', methods=['PUT'])
+@app.route('/api//tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
     task = Task.query.get(task_id)
     if task is None:
@@ -55,7 +59,7 @@ def update_task(task_id):
     db.session.commit()
     return jsonify({'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done})
 
-@app.route('/tasks/<int:task_id>', methods=['DELETE'])
+@app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task = Task.query.get(task_id)
     if task is None:
