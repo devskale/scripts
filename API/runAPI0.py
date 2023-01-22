@@ -18,18 +18,18 @@ tasks = [
     }
 ]
 
-@app.route('/tasks', methods=['GET'])
+@app.route('/api/tasks', methods=['GET'])
 def get_tasks():
     return jsonify({'tasks': tasks})
 
-@app.route('/tasks/<int:task_id>', methods=['GET'])
+@app.route('/api/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
     if len(task) == 0:
         return jsonify({'message': 'Task not found'}), 404
     return jsonify({'task': task[0]})
 
-@app.route('/tasks', methods=['POST'])
+@app.route('/api/tasks', methods=['POST'])
 def create_task():
     task = {
         'id': tasks[-1]['id'] + 1,
@@ -40,7 +40,7 @@ def create_task():
     tasks.append(task)
     return jsonify({'task': task}), 201
 
-@app.route('/tasks/<int:task_id>', methods=['PUT'])
+@app.route('/api/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
     if len(task) == 0:
@@ -51,7 +51,7 @@ def update_task(task_id):
     task['done'] = request.json.get('done', task['done'])
     return jsonify({'task': task})
 
-@app.route('/tasks/<int:task_id>', methods=['DELETE'])
+@app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
     if len(task) == 0:
