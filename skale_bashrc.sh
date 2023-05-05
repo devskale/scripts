@@ -36,3 +36,6 @@ echo "Ext: $_ipext"
 echo "Disk $DISK1 total  $DISK2 used  $DISK3 free"
 echo "Mem  $RAM1 total  $RAM2 used  $RAM3 free"
 echo "dir: $(pwd)"
+
+## fixes the X11 auth recejt failure
+export XAUTHORITY=$HOME/.Xauthority
