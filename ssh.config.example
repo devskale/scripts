@@ -38,10 +38,10 @@ Host amd2
 # 	git@github.com
 
 Host github.com
-        User git
-        Hostname github.com
-        PreferredAuthentications publickey
-        IdentityFile ~/.ssh/id_rsa
+  User git
+  Hostname github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/id_rsa
 
 # git2 account, the keyfile is different
 # usage example
