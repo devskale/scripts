@@ -39,3 +39,36 @@ echo "dir: $(pwd)"
 
 ## fixes the X11 auth recejt failure
 export XAUTHORITY=$HOME/.Xauthority
+
+# Check if 'python' command exists
+if command -v python >/dev/null 2>&1; then
+    echo "Python is installed and accessible as 'python'."
+else
+    #echo "Python is not accessible as 'python'."
+
+    # Check if 'python3' command exists
+    if command -v python3 >/dev/null 2>&1; then
+        alias python=python3
+        echo "Python is accessible as 'python'. Creating an alias."
+    else
+        echo "Please install Python3."
+    fi
+fi
+
+# Check if Docker is installed
+if command -v docker >/dev/null 2>&1; then
+    echo "Docker is installed."
+
+    # Check if Docker processes are running
+    docker_ps_output=$(docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}")
+
+    if [[ -z $docker_ps_output ]]; then
+        echo "No Docker processes are currently running."
+    else
+        echo "Running Docker processes:"
+        echo -e "CONTAINER ID\tIMAGE\t\t\tSTATUS"
+        echo "$docker_ps_output"
+    fi
+else
+    echo "Docker is not installed. Please install Docker to use it."
+fi
