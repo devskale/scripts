@@ -39,6 +39,7 @@ echo "dir: $(pwd)"
 
 ## fixes the X11 auth recejt failure
 export XAUTHORITY=$HOME/.Xauthority
+TERM=xterm-256color
 
 # Check if 'python' command exists
 if command -v python >/dev/null 2>&1; then
@@ -72,3 +73,4 @@ if command -v docker >/dev/null 2>&1; then
 else
     echo "Docker is not installed. Please install Docker to use it."
 fi
+
