@@ -74,3 +74,22 @@ else
     echo "Docker is not installed. Please install Docker to use it."
 fi
 
+
+# Check if Webinoly is installed
+if command -v webinoly &> /dev/null; then
+    # List all sites managed by Webinoly
+    echo "List of Webanoly sites:"
+    sudo site -list
+else
+    echo "Webinoly is not installed."
+fi
+# Check if Nginx is installed
+if command -v nginx &> /dev/null; then
+    # List all active Nginx sites
+    echo "List of active Nginx sites:"
+    for site in /etc/nginx/sites-enabled/*; do
+        basename "$site"
+    done
+else
+    echo "Nginx is not installed."
+fi

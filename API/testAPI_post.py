@@ -4,7 +4,10 @@ import requests
 url = 'https://amd2.mooo.com/api/tasks'
 
 # Set the payload with the task details
-payload = {'title': 'How to ... around', 'description': 'The more you .. around the more you find out'}
+payload = {
+    'title': 'How to ... around', 
+    'description': 'The more you .. around the more you find out'
+    }
 
 # Send the POST request
 response = requests.post(url, json=payload)
