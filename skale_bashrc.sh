@@ -2,10 +2,14 @@ _me=$(whoami)
 _host=$(hostname -s)
 _myip=$(hostname -I | cut -d ' ' -f1)
 
-_os=$(hostnamectl|egrep "Operating")
-_krnl=$(hostnamectl|egrep "Kernel")
+#_os=$(hostnamectl|egrep "Operating")
+#_krnl=$(hostnamectl|egrep "Kernel")
 _ipext=$(curl ifconfig.co -s)
 _model=$(cat /proc/cpuinfo|egrep "Model")
+
+_os=$(hostnamectl | grep "Operating System:" | cut -d: -f2 | sed 's/^[ ]*//')
+_kernel=$(hostnamectl | grep "Kernel:" | cut -d: -f2 | sed 's/^[ ]*//')
+_arch=$(hostnamectl | grep "Architecture:" | cut -d: -f2 | sed 's/^[ ]*//')
 
 # Speicherbelegung
 # Modify disk space check to use main partition only
@@ -35,9 +39,21 @@ echo "       \/     \/    \/          \/  \/            "
 cat ~/code/scripts/minion.txt
 
 printf "\n"
-printf "%-20s %s\n" "System:" "${_os##*( )}"
-printf "%-20s %s\n" "Kernel:" "${_krnl##*( )}"
-printf "%-20s %s\n" "CPU:" "${_model##*( )}"
+printf "%-20s %s\n" "System:" "$_os"
+printf "%-20s %s\n" "Kernel:" "$_kernel"
+printf "%-20s %s\n" "Architecture:" "$_arch"
+
+# Get CPU info more reliably
+cpu_count=$(grep -c processor /proc/cpuinfo)
+cpu_model=$(grep "model name" /proc/cpuinfo | head -1 | cut -d: -f2 | sed 's/AMD//;s/Processor//;s/  / /')
+cpu_mhz=$(grep "cpu MHz" /proc/cpuinfo | head -1 | awk '{printf "%.1f", $4/1000}')
+
+printf "%-20s %dx%s @%sGHz\n" \
+   "CPU:" \
+   "$cpu_count" \
+   "$cpu_model" \
+   "$cpu_mhz"
+
 printf "%-20s %s\n" "User:" "$_me@$_host"
 printf "%-20s %s\n" "Internal IP:" "$_myip"
 printf "%-20s %s\n" "External IP:" "$_ipext"
@@ -53,7 +69,7 @@ printf "%-20s %-12s %-12s %-12s %-12s\n" \
 # Memory line stays the same
 printf "%-20s %-12s %-12s %-12s %-12s\n" \
     "RAM" "$RAM1" "$RAM2" "$RAM3" "${RAM_PERCENT}%"
-printf "%s\n" "$(printf '=%.0s' {1..50})"
+printf "%s\n" "$(printf ' %.0s' {1..10})"
 
 ## fixes the X11 auth recejt failure
 export XAUTHORITY=$HOME/.Xauthority
