@@ -39,6 +39,10 @@ echo "       \/     \/    \/          \/  \/            "
 cat ~/code/scripts/minion.txt
 
 printf "\n"
+printf "%-20s %s\n" "User:" "$_me@$_host"
+printf "%-20s %s\n" "Internal IP:" "$_myip"
+printf "%-20s %s\n" "External IP:" "$_ipext"
+
 printf "%-20s %s\n" "System:" "$_os"
 printf "%-20s %s\n" "Kernel:" "$_kernel"
 printf "%-20s %s\n" "Architecture:" "$_arch"
@@ -54,9 +58,6 @@ printf "%-20s %dx%s @%sGHz\n" \
    "$cpu_model" \
    "$cpu_mhz"
 
-printf "%-20s %s\n" "User:" "$_me@$_host"
-printf "%-20s %s\n" "Internal IP:" "$_myip"
-printf "%-20s %s\n" "External IP:" "$_ipext"
 # Format disk and memory info
 # First line format (headers)
 printf "%-20s %-12s %-12s %-12s %-12s\n" \
