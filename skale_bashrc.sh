@@ -8,14 +8,22 @@ _ipext=$(curl ifconfig.co -s)
 _model=$(cat /proc/cpuinfo|egrep "Model")
 
 # Speicherbelegung
-DISK1=`df -h | grep 'dev/root' | awk '{print $2}'`    # Gesamtspeicher
-DISK2=`df -h | grep 'dev/root' | awk '{print $3}'`    # Belegt
-DISK3=`df -h | grep 'dev/root' | awk '{print $4}'`    # Frei
+# Modify disk space check to use main partition only
+DISK1=$(df -h | grep '/dev/sda1 ' | awk '{print $2}')    # Total
+DISK2=$(df -h | grep '/dev/sda1 ' | awk '{print $3}')    # Used  
+DISK3=$(df -h | grep '/dev/sda1 ' | awk '{print $4}')    # Free
+DISK4=$(df -h | grep '/dev/sda1 ' | awk '{print $5}')    # Use%
+
 # Arbeitsspeicher
 RAM1=`free -h | grep 'Mem' | awk '{print $2}'`    # Total
 RAM2=`free -h | grep 'Mem' | awk '{print $3}'`    # Used
 RAM3=`free -h | grep 'Mem' | awk '{print $4}'`    # Free
 RAM4=`free -h | grep 'Swap' | awk '{print $3}'`    # Swap used
+
+# Calculate RAM usage percentage
+RAM_TOTAL=$(free | grep 'Mem' | awk '{print $2}')    # Total in KB
+RAM_USED=$(free | grep 'Mem' | awk '{print $3}')     # Used in KB
+RAM_PERCENT=$((100 * RAM_USED / RAM_TOTAL))
 
 echo "          __          .__              .__        "
 echo "    _____|  | ______  |  |   ____      |__| ____  "
@@ -26,16 +34,26 @@ echo "       \/     \/    \/          \/  \/            "
 
 cat ~/code/scripts/minion.txt
 
-echo ""
-echo "${_os##*( )}"
-echo "${_krnl##*( )}"
-echo "${_model##*( )}"
-echo "$_me@$_host"
-echo "Int: $_myip"
-echo "Ext: $_ipext"
-echo "Disk $DISK1 total  $DISK2 used  $DISK3 free"
-echo "Mem  $RAM1 total  $RAM2 used  $RAM3 free"
-echo "--"
+printf "\n"
+printf "%-20s %s\n" "System:" "${_os##*( )}"
+printf "%-20s %s\n" "Kernel:" "${_krnl##*( )}"
+printf "%-20s %s\n" "CPU:" "${_model##*( )}"
+printf "%-20s %s\n" "User:" "$_me@$_host"
+printf "%-20s %s\n" "Internal IP:" "$_myip"
+printf "%-20s %s\n" "External IP:" "$_ipext"
+# Format disk and memory info
+# First line format (headers)
+printf "%-20s %-12s %-12s %-12s %-12s\n" \
+    "" "total" "used" "free" "used%"
+
+# Second line format (data)
+printf "%-20s %-12s %-12s %-12s %-12s\n" \
+    "DISK" "$DISK1" "$DISK2" "$DISK3" "$DISK4"
+
+# Memory line stays the same
+printf "%-20s %-12s %-12s %-12s %-12s\n" \
+    "RAM" "$RAM1" "$RAM2" "$RAM3" "${RAM_PERCENT}%"
+printf "%s\n" "$(printf '=%.0s' {1..50})"
 
 ## fixes the X11 auth recejt failure
 export XAUTHORITY=$HOME/.Xauthority
