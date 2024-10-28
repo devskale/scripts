@@ -86,16 +86,31 @@ else
 fi
 
 
+
 # Check if Nginx is installed
 if command -v nginx &> /dev/null; then
-   # List all active Nginx sites
-   echo "Active Nginx sites:"
-   for site in /etc/nginx/sites-enabled/*; do
-       echo -e "    $(basename "$site")"
-   done
+    nginx_version=$(nginx -v 2>&1 | cut -d'/' -f2 | tr -d '()' | tr -d '\n')
+    nginx_user=$(grep -i '^user' /etc/nginx/nginx.conf | awk '{print $2}' | tr -d ';' | head -n1)
+    nginx_status=$(systemctl is-active nginx)
+    
+    printf "Nginx status: %s (v%s) User: %s\n" "$nginx_status" "$nginx_version" "$nginx_user"
+    echo "Active Nginx sites:"
+    
+    for site in /etc/nginx/sites-enabled/*; do
+        if [ -f "$site" ]; then
+            site_name=$(basename "$site")
+            server_name=$(grep -m1 'server_name' "$site" | awk '{print $2}' | tr -d ';')
+            root_dir=$(grep -m1 'root' "$site" | awk '{print $2}' | tr -d ';')
+            php_version=$(grep -m1 'fastcgi_pass' "$site" | grep -o 'php[0-9.]*' | tr -d 'php' | tr -d '\n' || echo "-")
+            
+            printf "    %-20s Domain: %-25s Root: %-30s PHP: %s\n" \
+                  "$site_name" "$server_name" "${root_dir:--}" "$php_version"
+        fi
+    done
 else
-   echo "Nginx -"
+    echo "Nginx -"
 fi
+
 
 
 # Check for WordPress installations
