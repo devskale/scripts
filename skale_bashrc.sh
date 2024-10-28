@@ -66,12 +66,10 @@ if command -v docker >/dev/null 2>&1; then
     # Check if Docker processes are running
     docker_ps_output=$(docker ps --format "{{.ID}}\t{{.Image}}\t{{.Status}}")
 
-    if [[ -z $docker_ps_output ]]; then
-        echo "No Docker processes are currently running."
-    else
+    if [[ $docker_ps_output ]]; then
         echo "Running Docker processes:"
-        echo -e "CONTAINER ID\tIMAGE\t\t\tSTATUS"
-        echo "$docker_ps_output"
+        echo -e "    CONTAINER ID\tIMAGE\t\t\tSTATUS"
+        echo "    $docker_ps_output"
     fi
 else
     echo "Docker -"
