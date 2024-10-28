@@ -156,3 +156,27 @@ else
 fi
 
 cd "$ORIGINAL_DIR"
+
+
+# Check if Node.js is installed and running processes
+if command -v node &> /dev/null; then
+   node_version=$(node --version 2>/dev/null)
+   node_processes=$(ps aux | grep '[n]ode' | wc -l)
+   pm2_processes=$(pm2 list 2>/dev/null | grep -v 'ps aux' | grep 'online\|errored\|stopped' | wc -l || echo "0")
+
+   if [ $node_processes -gt 0 ] || [ $pm2_processes -gt 0 ]; then
+       printf "Node %s running processes: %d (PM2: %s)\n" "$node_version" "$node_processes" "$pm2_processes"
+
+       # Show PM2 processes if available
+       if command -v pm2 &> /dev/null; then
+           pm2 list 2>/dev/null | grep -v "┌|└" | grep -v "Module"
+       fi
+
+       # Show direct Node processes
+       ps aux | grep '[n]ode' | awk '{printf "    %-10s %-40s\n", $2, $11}'
+   else
+       printf "Node %s installed but no processes running\n" "$node_version"
+   fi
+else
+   echo "Node.js -"
+fi
