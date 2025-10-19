@@ -1,2 +1,5 @@
 webinoly.txt
 __pycache__/
+*.0.sh
+*.1.sh
+.DS_Store
